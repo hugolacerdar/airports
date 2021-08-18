@@ -21,9 +21,8 @@ defmodule Airports do
     end)
     |> Flow.reject(&(&1.type == "closed"))
     |> Flow.partition(key: {:key, :country})
-    |> Flow.reduce(fn -> %{} end, fn item, acc ->
-      Map.update(acc, item.country, 1, &(&1 + 1))
-    end)
+    |> Flow.group_by(& &1.country)
+    |> Flow.map(fn {country, data} -> {country, Enum.count(data)} end)
     |> Enum.to_list()
   end
 end
