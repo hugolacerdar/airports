@@ -8,6 +8,10 @@ defmodule Airports do
   def open_airports() do
     airports_csv()
     |> File.stream!()
+    |> Stream.map(fn event ->
+      Process.sleep(Enum.random([0, 0, 0, 1]))
+      event
+    end)
     |> Flow.from_enumerable()
     |> Flow.map(fn row ->
       [row] = CSV.parse_string(row, skip_headers: false)
