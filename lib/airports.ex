@@ -6,6 +6,8 @@ defmodule Airports do
   end
 
   def open_airports() do
+    window = Flow.Window.trigger_every(Flow.Window.global(), 1000)
+
     airports_csv()
     |> File.stream!()
     |> Stream.map(fn event ->
